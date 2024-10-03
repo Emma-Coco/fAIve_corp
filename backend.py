@@ -3,6 +3,7 @@ from mistralai import Mistral
 import base64
 import os
 from dotenv import load_dotenv
+import random
 
 # Charger les variables depuis le fichier .env
 load_dotenv()
@@ -12,6 +13,32 @@ GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
 # Configuration de l'API Mistral AI
 MISTRAL_API_KEY = os.getenv('MISTRAL_API_KEY')
 
+
+# Fonction pour obtenir une adresse aléatoire depuis l'API Google
+def get_random_address():
+    # Appel à l'API Google pour obtenir des adresses (par exemple via l'API Places)
+
+    url = f"https://maps.googleapis.com/maps/api/place/textsearch/json?query=restaurants+in+paris&key={GOOGLE_API_KEY}"
+    
+    response = requests.get(url)
+    data = response.json()
+
+    if "results" in data:
+        # Sélectionner une adresse aléatoire dans les résultats
+        random_address = random.choice(data["results"])
+        return random_address.get("formatted_address", "No address found")
+
+    return "No address found"
+
+def get_autocomplete_suggestions(query, google_api_key):
+    url = f"https://maps.googleapis.com/maps/api/place/autocomplete/json?input={query}&key={google_api_key}"
+    
+    response = requests.get(url)
+    data = response.json()
+
+    if "predictions" in data:
+        return data["predictions"]  # Retourne les suggestions
+    return []  # Retourne une liste vide si aucune suggestion n'est trouvée
 
 
 # Fonction pour résumer les avis

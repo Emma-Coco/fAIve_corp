@@ -3,3 +3,5 @@ requests
 streamlit
 mistralai
 dotenv
+flask
+flask_cors

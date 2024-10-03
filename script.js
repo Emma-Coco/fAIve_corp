@@ -9,6 +9,29 @@ document.addEventListener("DOMContentLoaded", function () {
         chatWrapper.scrollTop = chatWrapper.scrollHeight;
     }
 
+    // Fonction pour récupérer l'adresse depuis l'API Flask
+
+
+    function fetchRandomAddress() {
+        fetch('http://127.0.0.1:5000/api_random_address', {
+            method: 'GET',
+            mode: 'cors',  // Enable CORS
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Adresse aléatoire récupérée :", data.address);
+                // Ici tu peux utiliser l'adresse dans ton chat ou dans un autre composant de l'interface
+            })
+            .catch(error => console.error('Erreur:', error));
+    }
+
+    // Appeler la fonction pour récupérer l'adresse à chaque démarrage
+    fetchRandomAddress();
+
+
     // Create first chat bubble
     setTimeout(() => {
         const firstBubble = `
@@ -35,22 +58,69 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 1000);
 
     // Create third chat bubble with input after another delay
-    setTimeout(() => {
-        const thirdBubble = `
-                <div class="user-container" id="address-container">
-                    <input type="text" id="user-input" placeholder="Votre réponse ici" />
-                    <button id="submit-address">Envoyer</button>
-                </div>
-        `;
-        chatWrapper.innerHTML += thirdBubble;
-        scrollToBottom(); // Scroll after adding the bubble
+// Créer la troisième bulle de chat avec l'input
+setTimeout(() => {
+    const thirdBubble = `
+        <div class="user-container" id="address-container">
+            <input type="text" id="user-input" placeholder="Entrez votre adresse" autocomplete="off"/>
+            <div id="autocomplete-list" class="autocomplete-items"></div>
+            <button id="submit-address" disabled>Envoyer</button> <!-- Bouton désactivé par défaut -->
+        </div>
+    `;
+    chatWrapper.innerHTML += thirdBubble;
+    scrollToBottom(); // Descendre automatiquement après l'ajout de la bulle
 
-        // Add event listener for address submission
-        const submitButton = document.getElementById("submit-address");
-        submitButton.addEventListener("click", () => {
+    let validAddressSelected = false;
+
+    // Fonction pour obtenir des suggestions d'adresses à partir de l'API Google
+    function fetchAutocompleteSuggestions(query) {
+        if (!query) return;
+
+        fetch(`http://127.0.0.1:5000/api_autocomplete_address?query=${query}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            const autocompleteList = document.getElementById("autocomplete-list");
+            autocompleteList.innerHTML = ""; // Clear previous suggestions
+            validAddressSelected = false; // Reset valid address selection
+
+            // Ajouter les cinq premières suggestions à la liste
+            data.suggestions.slice(0, 5).forEach(suggestion => {
+                const suggestionItem = document.createElement("div");
+                suggestionItem.innerHTML = suggestion.description;
+                suggestionItem.addEventListener("click", () => {
+                    document.getElementById("user-input").value = suggestion.description;
+                    autocompleteList.innerHTML = ""; // Clear suggestions after selection
+                    validAddressSelected = true; // Une adresse valide a été sélectionnée
+                    document.getElementById("submit-address").disabled = false; // Activer le bouton "Envoyer"
+                    document.getElementById("submit-address").style.backgroundColor = "#0f0f0f"; // Retourner au style normal
+                });
+                autocompleteList.appendChild(suggestionItem);
+            });
+        })
+        .catch(error => console.error('Erreur:', error));
+    }
+
+    // Event listener pour détecter la saisie dans l'input
+    const userInput = document.getElementById("user-input");
+    userInput.addEventListener("input", function() {
+        const query = userInput.value;
+        fetchAutocompleteSuggestions(query); // Fetch autocomplete suggestions
+        document.getElementById("submit-address").disabled = true; // Désactiver le bouton pendant que l'utilisateur tape
+        document.getElementById("submit-address").style.backgroundColor = "#ccc"; // Griser le bouton quand il est désactivé
+    });
+
+    // Add event listener for address submission
+    const submitButton = document.getElementById("submit-address");
+    submitButton.addEventListener("click", () => {
+        if (validAddressSelected) {
             userAddress = document.getElementById("user-input").value; // Capture l'adresse de l'utilisateur
             if (userAddress) {
-                // Remplace l'input par du texte affichant l'adresse entrée
+                // Remplacer l'input par le texte de l'adresse sélectionnée
                 const addressContainer = document.getElementById("address-container");
                 addressContainer.innerHTML = `
                     <div class="submitted-address">
@@ -59,8 +129,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 `;
                 displayRobotText();  // Affiche le texte dans une nouvelle bulle
             }
-        });
-    }, 2000);
+        }
+    });
+}, 2000);
+
+
+
+
 
     // Function to display the robot's message text
     function displayRobotText() {
