@@ -1,3 +1,4 @@
+/* Reset and Global Styles */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -14,17 +15,17 @@ body, html {
 }
 
 .wrapper {
-    width: 100%;
-    max-width: 900px;
+    width: 500px; /* Largeur fixe */
     height: 80vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     border: 1px solid #ccc;
     border-radius: 10px;
     background-color: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden; /* Empêche l'élargissement du cadre */
 }
 
 .header {
@@ -63,20 +64,24 @@ body, html {
     width: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     padding: 20px;
-    overflow-y: auto;
+    overflow-y: auto; /* Permet le défilement si le contenu est trop grand */
 }
 
 .chat-wrapper {
     width: 100%;
-    max-width: 700px;
+    max-width: 700px; /* Largeur maximale du contenu pour empêcher le débordement */
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     margin: 0 auto;
+    word-wrap: break-word; /* Gère le wrapping du texte trop long */
+    overflow-wrap: break-word; /* Gère le wrapping du texte trop long */
+    overflow-y: auto; /* Permet le défilement vertical si nécessaire */
 }
 
+/* Chat Bubble Styles */
 .chat-bubble {
     padding: 8px 20px;
     margin-bottom: 12px;
@@ -88,12 +93,14 @@ body, html {
     position: relative;
     font-size: 16px;
     text-align: left;
-    word-wrap: break-word;
+    word-wrap: break-word; /* Gère le wrapping du texte trop long */
+    overflow-wrap: break-word; /* Gère le wrapping du texte trop long */
+    animation: fadeIn 0.5s ease-in-out;
 }
 
 .chat-bubble img {
     height: 40px;
-    margin-right: 10px; /* Ajout d'un espace entre l'image et la bulle */
+    margin-right: 10px;
 }
 
 .chat-row {
@@ -103,12 +110,12 @@ body, html {
 }
 
 .chat-row .chat-bubble {
-    flex: 1; /* Faire en sorte que la bulle occupe tout l'espace restant */
+    flex: 1;
 }
 
 .robot-image {
     height: 40px;
-    margin-right: 5px; /* Espace entre l'image du robot et la bulle */
+    margin-right: 5px;
 }
 
 .no-triangle .chat-bubble::before {
@@ -127,37 +134,64 @@ body, html {
     border-bottom: 10px solid #E0B1ED;
 }
 
-.user-bubble {
-    align-self: flex-end;
-    justify-content: flex-end;
-    position: relative;
+.user-bubble .chat-bubble::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    right: -7.5px;
+    width: 0;
+    height: 0;
+    border-right: 10px solid transparent;
+    border-left: 10px solid transparent;
+    border-bottom: 10px solid #ffffff;
 }
 
-.user-message {
+/* Container pour input et boutons */
+.user-container {
     background: #ffffff;
-    color: #0f0f0f;
-    font-weight: 500;
-    box-shadow: 2px 2px 8px rgba(15, 15, 15, 0.2);
-    position: relative;
-    border-radius: 20px;
-}
-
-.input-container {
-    background: #ffffff;
-    font-weight: 500;
-    box-shadow: 2px 2px 8px rgba(15, 15, 15, 0.2);
+    display: flex;
     padding: 5px 5px;
     border-radius: 20px;
-    display: flex;
-    justify-content: center;
     align-items: center;
-    width: 100%;
+    box-shadow: 2px 2px 8px rgba(15, 15, 15, 0.2);
+    align-self: flex-end;
+    position: relative;
+    padding: 10px;
+    margin-bottom: 12px;
+    margin-right: 5px;
+    max-width: 80%;
+    word-wrap: break-word; /* Assure le wrapping du texte */
+    overflow-wrap: break-word; /* Assure le wrapping du texte */
 }
 
+/* Input et Boutons */
 input {
-    width: 100%;
+    width: 80%;
     padding: 8px;
     border-radius: 20px;
     border: none;
     outline: none;
+    background-color: #f4f4f9;
+    margin-right: 10px;
+}
+
+#submit-address, .category-btn {
+    background-color: #0f0f0f;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    box-shadow: 2px 2px 8px rgba(15, 15, 15, 0.2);
+}
+
+#submit-address:hover, .category-btn:hover {
+    background-color: #333;
+}
+
+/* Boutons dans les bulles utilisateur */
+.category-buttons {
+    display: flex;
+    gap: 10px;
 }

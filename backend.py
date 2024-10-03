@@ -12,6 +12,8 @@ GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
 # Configuration de l'API Mistral AI
 MISTRAL_API_KEY = os.getenv('MISTRAL_API_KEY')
 
+
+
 # Fonction pour résumer les avis
 def summarize_avis(avis_list):
     avis_text = " ".join(avis_list)
