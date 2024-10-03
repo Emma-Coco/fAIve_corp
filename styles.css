@@ -66,20 +66,31 @@ body, html {
     justify-content: center;
     align-items: flex-start;
     padding: 20px;
-    overflow-y: auto; /* Permet le défilement si le contenu est trop grand */
+    overflow-y: hidden; /* Empêche le défilement sur cet élément */
 }
 
 .chat-wrapper {
     width: 100%;
-    max-width: 700px; /* Largeur maximale du contenu pour empêcher le débordement */
+    max-width: 700px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     margin: 0 auto;
-    word-wrap: break-word; /* Gère le wrapping du texte trop long */
-    overflow-wrap: break-word; /* Gère le wrapping du texte trop long */
-    overflow-y: auto; /* Permet le défilement vertical si nécessaire */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    overflow-y: auto; /* Permet le défilement vertical */
+    max-height: 100%; /* Limite la hauteur pour permettre le défilement */
+    
+    /* Cache la barre de scroll */
+    scrollbar-width: none; /* Pour Firefox */
+    -ms-overflow-style: none;  /* Pour Internet Explorer et Edge */
 }
+
+.chat-wrapper::-webkit-scrollbar {
+    display: none; /* Pour Chrome, Safari et Opera */
+}
+
+
 
 /* Chat Bubble Styles */
 .chat-bubble {

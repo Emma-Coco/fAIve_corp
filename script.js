@@ -156,7 +156,15 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
         `;
         chatWrapper.innerHTML += resultsBubble;
-        scrollToBottom(); // Scroll after adding the bubble
+
+       function scrollToBottom() {
+    const chatWrapper = document.getElementById("chat-wrapper");
+    chatWrapper.scroll({
+        top: chatWrapper.scrollHeight,
+        behavior: 'smooth'
+    });
+}
+
 
         // Ajout d'une nouvelle bulle utilisateur à la fin avec le texte "hello"
         setTimeout(() => {
