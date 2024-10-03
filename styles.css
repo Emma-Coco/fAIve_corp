@@ -235,4 +235,28 @@ input {
     background-color: #f0f0f0; /* Couleur de survol */
 }
 
+.show-more-container {
+    display: flex;
+    justify-content: flex-end; /* Aligne le bouton à droite */
+    margin: 10px 0; /* Espace vertical autour du bouton */
+    padding: 10px; /* Espace interne pour une apparence plus propre */
+}
+
+.show-more-btn {
+    background-color: #0f0f0f; /* Couleur de fond similaire aux boutons utilisateur */
+    color: white; /* Couleur du texte blanc */
+    border: none; /* Pas de bordure pour un look plus propre */
+    border-radius: 15px; /* Bordure arrondie */
+    padding: 8px 16px; /* Espacement interne du bouton */
+    font-size: 14px; /* Taille du texte */
+    cursor: pointer; /* Curseur interactif */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Effets de transition doux */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Légère ombre pour de la profondeur */
+}
+
+.show-more-btn:hover {
+    background-color: #333; /* Fond plus foncé au survol */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Ombre plus prononcée au survol */
+}
+
 
