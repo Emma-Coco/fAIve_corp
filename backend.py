@@ -122,3 +122,52 @@ def get_place_reviews(place_id):
 def get_base64_image(image_path):
     with open(image_path, "rb") as img_file:
         return base64.b64encode(img_file.read()).decode()
+    
+
+# Obtenir les lieux à proximité de l'adresse
+def get_nearby_places(address, category):
+    google_api_key = os.getenv("GOOGLE_API_KEY")
+    # Faire une requête à l'API de Google Maps Places
+    url = f"https://maps.googleapis.com/maps/api/place/textsearch/json?query={category}+near+{address}&key={google_api_key}"
+    response = requests.get(url)
+    data = response.json()
+
+    places = []
+    if "results" in data:
+        for place in data["results"][:10]:  # Limiter à 10 premiers résultats
+            place_info = {
+                "name": place["name"],
+                "address": place["formatted_address"],
+                "rating": place.get("rating", "N/A"),
+                "user_ratings_total": place.get("user_ratings_total", 0),
+                "place_id": place["place_id"]
+            }
+            places.append(place_info)
+
+    return places
+
+# Vérifier si le lieu est ouvert maintenant
+def is_open_now(place_id):
+    google_api_key = os.getenv("GOOGLE_API_KEY")
+    url = f"https://maps.googleapis.com/maps/api/place/details/json?place_id={place_id}&fields=opening_hours&key={google_api_key}"
+    response = requests.get(url)
+    data = response.json()
+    if "result" in data and "opening_hours" in data["result"]:
+        return data["result"]["opening_hours"].get("open_now", False)
+    return False
+
+# Appel à Mistral AI pour améliorer la sélection des meilleurs lieux
+def ask_mistral(prompt):
+    mistral_api_key = os.getenv("MISTRAL_API_KEY")
+    headers = {
+        "Authorization": f"Bearer {mistral_api_key}",
+        "Content-Type": "application/json"
+    }
+    response = requests.post(
+        "https://api.mistral.ai/v1/generate",
+        json={"prompt": prompt, "max_tokens": 500},
+        headers=headers
+    )
+    if response.status_code == 200:
+        return response.json().get("text", "")
+    return "No response from Mistral AI"

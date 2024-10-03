@@ -28,6 +28,26 @@ def autocomplete_address():
     return jsonify({"suggestions": suggestions})  # Retourne les suggestions sous forme de JSON
 
 
+# Route pour obtenir les lieux à proximité
+@app.route('/api_get_places', methods=['POST'])
+def get_places():
+    data = request.json
+    address = data.get("address")
+    category = data.get("category")
+
+    if not address or not category:
+        return jsonify({"error": "Adresse et catégorie manquantes"}), 400
+
+    # Appel au backend pour récupérer les lieux
+    places = backend.get_nearby_places(address, category)
+
+    # Appeler Mistral AI pour trier les lieux
+    prompt = f"Voici les adresses trouvées près de {address} dans la catégorie {category}: {places}."
+    mistral_response = backend.ask_mistral(prompt)
+
+    # Renvoyer les données JSON
+    return jsonify({"places": places, "mistral_response": mistral_response})
+
 
 
 if __name__ == "__main__":
