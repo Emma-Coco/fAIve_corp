@@ -1,4 +1,5 @@
 import streamlit as st
+import time
 from backend import get_base64_image
 
 # Chemins vers les images
@@ -16,7 +17,7 @@ st.markdown(
     f"""
     <style>
         .header {{
-            background-color: #0f0f0f;
+            background-color: black;
             height: 80px;
             display: flex;
             align-items: center;
@@ -73,10 +74,10 @@ st.markdown(
             word-wrap: break-word;  /* Permettre le retour à la ligne */
         }}
         /* Conditionnel pour les bulles sans image */
-        .no-robot .chat-message {{
-            margin-left: 50px;  /* Ajoute une marge à gauche */
+        .no-triangle .chat-message::before {{
+            display: none;  /* Retirer le triangle pour la première bulle */
         }}
-        /* Positionnement du triangle à côté de la bulle de dialogue */
+        /* Positionnement du triangle à côté de la bulle de dialogue pour la deuxième bulle */
         .chat-message::before {{
             content: '';
             position: absolute;
@@ -90,14 +91,13 @@ st.markdown(
         }}
         .chat-bubble {{
             display: flex;
-            align-items: center;  /* Aligner verticalement le contenu (image + bulle) */
+            align-items: center;
             justify-content: flex-start;  /* Aligner les bulles à gauche dans le wrapper */
             width: 100%;
         }}
         .chat-bubble img {{
             height: 40px;
             margin-right: 10px;
-            align-self: flex-start;  /* Aligner l'image du robot en haut de la bulle */
         }}
     </style>
     <header class="header">
@@ -112,22 +112,45 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Utilisation de st.markdown avec un seul appel pour garantir que tout est inclus dans le conteneur
-st.markdown(
-    f"""
-    <div class='chat-container'>
-        <div class="chat-wrapper">
-            <!-- Bulle sans image de robot -->
-            <div class="chat-bubble no-robot">
-                <div class="chat-message">Bonjour, que souhaitez-vous faire aujourd'hui ?</div>
-            </div>
-            <!-- Bulle avec image de robot -->
-            <div class="chat-bubble">
-                <img src="data:image/png;base64,{robot_image_base64}" alt="Robot">
-                <div class="chat-message">Où êtes-vous ?</div>
+# Déclaration d'un espace vide qui sera remplacé après 2 secondes
+chat_placeholder = st.empty()
+
+# Remplissage du conteneur initial avec la première bulle sans triangle
+with chat_placeholder.container():
+    st.markdown(
+        f"""
+        <div class='chat-container'>
+            <div class="chat-wrapper">
+                <!-- Bulle sans image de robot, sans triangle -->
+                <div class="chat-bubble no-triangle">
+                    <div class="chat-message">Bonjour, que souhaitez-vous faire aujourd'hui ?</div>
+                </div>
             </div>
         </div>
-    </div>
-    """, 
-    unsafe_allow_html=True
-)
+        """,
+        unsafe_allow_html=True
+    )
+
+# Attendre 2 secondes avant d'afficher la deuxième bulle
+time.sleep(1)
+
+# Remplacer le contenu avec les deux bulles (première sans triangle + deuxième avec le robot)
+with chat_placeholder.container():
+    st.markdown(
+        f"""
+        <div class='chat-container'>
+            <div class="chat-wrapper">
+                <!-- Bulle sans image de robot, sans triangle -->
+                <div class="chat-bubble no-triangle">
+                    <div class="chat-message">Bonjour, que souhaitez-vous faire aujourd'hui ?</div>
+                </div>
+                <!-- Bulle avec image de robot avec triangle -->
+                <div class="chat-bubble">
+                    <img src="data:image/png;base64,{robot_image_base64}" alt="Robot">
+                    <div class="chat-message">Où êtes-vous ?</div>
+                </div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
