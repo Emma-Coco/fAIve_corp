@@ -95,7 +95,7 @@ body, html {
 /* Chat Bubble Styles */
 .chat-bubble {
     padding: 8px 20px;
-    margin: 10px; /* Ajout d'une marge autour des bulles pour éviter les coupures */
+    margin: 5px 10px; /* Ajout d'une marge autour des bulles pour éviter les coupures */
     border-radius: 20px;
     background: linear-gradient(90deg, #E0B1ED 0%, #C2EAFB 100%);
     color: white;
