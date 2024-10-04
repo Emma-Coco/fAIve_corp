@@ -315,6 +315,74 @@ input {
     word-wrap: break-word;
 }
 
+/* Styles actuels que tu gardes inchangés pour les grands écrans */
+
+@media only screen and (max-width: 768px) {
+    /* Ces styles s'appliqueront uniquement pour les écrans de 768px ou moins (tablettes et mobiles) */
+    
+    .wrapper {
+        width: 90%; /* Utilise 90% de la largeur de l'écran mobile */
+        height: 85vh; /* Ajustement de la hauteur pour les mobiles */
+    }
+
+    .header img {
+        height: 2.5rem; /* Taille de l'image réduite pour les mobiles */
+    }
+
+    .profile img {
+        height: 2rem; /* Taille réduite pour le profil */
+    }
+
+    .chat-wrapper {
+        max-width: 100%; /* La largeur de la bulle prend tout l'espace disponible */
+    }
+
+    .chat-bubble {
+        font-size: 0.9rem; /* Réduit légèrement la taille du texte pour mobile */
+        padding: 0.6rem 1rem; /* Ajustement des paddings */
+    }
+
+    .chat-row {
+        margin-bottom: 0.8rem; /* Espacement réduit */
+    }
+
+    .robot-image {
+        height: 2rem; /* Image du robot plus petite sur mobile */
+    }
+
+    .user-container {
+        padding: 0.8rem; /* Ajuste le padding */
+        max-width: 100%; /* La bulle utilisateur prend toute la largeur */
+        margin-right: 0; /* Enlève la marge droite sur mobile */
+    }
+
+    input {
+        width: 85%; /* Plus de place pour l'input */
+        padding: 0.6rem;
+    }
+
+    #submit-address, .category-btn {
+        font-size: 0.8rem; /* Réduit la taille du texte des boutons */
+        padding: 0.4rem 0.8rem; /* Ajustement du padding des boutons */
+    }
+
+    .autocomplete-items {
+        width: 90%; /* Plus large pour les mobiles */
+    }
+
+    .show-more-container {
+        margin: 0.5rem; /* Ajuste l'espacement pour plus de compacité */
+    }
+
+    .user-bubble {
+        width: 100%; /* Prend tout l'espace disponible sur mobile */
+        padding: 0.8rem 1rem; /* Ajuste les paddings */
+    }
+
+    .place-details {
+        font-size: 0.85rem; /* Réduction de la taille du texte pour les détails */
+    }
+}
 
 
 
