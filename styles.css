@@ -384,6 +384,30 @@ input {
     }
 }
 
+@media only screen and (max-width: 480px) {
+    .wrapper {
+        width: 95%; /* Utilise presque toute la largeur pour petits écrans */
+        height: auto; /* Ajuste la hauteur pour plus de flexibilité */
+    }
+
+    .header img {
+        height: 2rem; /* Encore plus petit pour les très petits écrans */
+    }
+
+    .chat-bubble {
+        font-size: 0.8rem; /* Taille de texte encore réduite pour les petits écrans */
+        padding: 0.5rem 0.8rem; /* Ajustement des paddings */
+    }
+
+    input {
+        width: 90%; /* Encore plus de place pour l'input */
+    }
+
+    #submit-address, .category-btn {
+        font-size: 0.75rem; /* Réduit la taille du texte des boutons pour petits écrans */
+        padding: 0.4rem 0.6rem;
+    }
+}
 
 
 
