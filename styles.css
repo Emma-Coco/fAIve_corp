@@ -352,6 +352,8 @@ input {
         padding: 0.8rem; /* Ajuste le padding */
         max-width: 100%; /* La bulle utilisateur prend toute la largeur */
         margin-right: 0; /* Enlève la marge droite sur mobile */
+        transform: translateX(-5px); /* Déplace l'élément de 50 pixels vers la gauche */
+
     }
 
     input {
