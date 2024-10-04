@@ -135,12 +135,15 @@ def get_nearby_places(address, category):
     places = []
     if "results" in data:
         for place in data["results"][:10]:  # Limiter à 10 premiers résultats
+            place_id = place["place_id"]
             place_info = {
                 "name": place["name"],
                 "address": place["formatted_address"],
                 "rating": place.get("rating", "N/A"),
                 "user_ratings_total": place.get("user_ratings_total", 0),
-                "place_id": place["place_id"]
+                "place_id": place_id,
+                "url" : f"https://www.google.com/maps/place/?q=place_id:{place_id}"
+                
             }
             places.append(place_info)
 
