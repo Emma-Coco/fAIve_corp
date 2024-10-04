@@ -95,7 +95,7 @@ body, html {
 /* Chat Bubble Styles */
 .chat-bubble {
     padding: 8px 20px;
-    margin-bottom: 12px;
+    margin: 10px; /* Ajout d'une marge autour des bulles pour éviter les coupures */
     border-radius: 20px;
     background: linear-gradient(90deg, #E0B1ED 0%, #C2EAFB 100%);
     color: white;
@@ -157,18 +157,16 @@ body, html {
     border-bottom: 10px solid #ffffff;
 }
 
-/* Container pour les activités, même style que les bulles de l'utilisateur */
 .user-container {
     background: #ffffff;
     display: flex;
     padding: 10px;
+    margin: 10px; /* Ajout d'une marge autour des bulles des utilisateurs */
     border-radius: 20px;
     align-items: center;
     box-shadow: 2px 2px 8px rgba(15, 15, 15, 0.2); /* Légère ombre */
     align-self: flex-end;
     position: relative;
-    margin-bottom: 12px;
-    margin-right: 5px;
     max-width: 80%;
     word-wrap: break-word; /* Assure le wrapping du texte */
     overflow-wrap: break-word; /* Assure le wrapping du texte */
