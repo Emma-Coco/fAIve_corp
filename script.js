@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => console.error('Erreur:', error));
     }
 
- // Exemple d'utilisation pour afficher les lieux et le message du bot progressivement
+// Exemple d'utilisation pour afficher les lieux et le message du bot progressivement
 function fetchNearbyPlaces() {
     const requestData = {
         address: userAddress,
@@ -57,9 +57,6 @@ function fetchNearbyPlaces() {
     .catch(error => console.error('Erreur:', error));
 }
 
-// Appel de la fonction fetchNearbyPlaces pour démarrer la progression
-fetchNearbyPlaces();
-
     // Fonction pour afficher le message du bot avec les résultats
 function displayBotMessage(address, category, callback) {
     const botMessage = `
@@ -77,13 +74,20 @@ function displayBotMessage(address, category, callback) {
 
 // Fonction pour afficher un lot de lieux avec temporisation
 function displayUserPlacesBatch(places, startIndex) {
-    const batch = places.slice(startIndex, startIndex + 5);
-    
+    const batch = places.slice(startIndex, startIndex + 5); // Récupère les lieux par lot de 5
+
+    // Afficher chaque lieu avec un délai
     batch.forEach((place, index) => {
         setTimeout(() => {
             const userBubble = `
                 <div class="user-container user-bubble">
-                    <strong>${place.name}</strong> - ${place.address} | ⭐️ ${place.rating} (${place.user_ratings_total} avis)
+                    <a href="${place.url}" target="_blank" class="activity-link">
+                        <div class="place-name">${place.name}</div>
+                    </a>
+                    <div class="place-details">
+                        ${place.address}<br>
+                        ⭐️ ${place.rating} (${place.user_ratings_total} avis)
+                    </div>
                 </div>
             `;
             chatWrapper.innerHTML += userBubble;
@@ -91,13 +95,14 @@ function displayUserPlacesBatch(places, startIndex) {
         }, index * 1000); // Délai de 1 seconde entre chaque lieu
     });
 
-    // Afficher le bouton "Afficher plus" après avoir affiché ce lot
+    // Vérifier si tous les lieux ont été affichés
     if (startIndex + 5 < places.length) {
+        // Si d'autres lieux existent, afficher le bouton "Afficher plus"
         setTimeout(() => {
             displayShowMoreButton();
-        }, batch.length * 1000); // Afficher le bouton après que tous les lieux du batch aient été affichés
-    } else {
-        // Si tous les lieux ont été affichés, afficher le message avec l'image du bot
+        }, batch.length * 1000); // Attendre l'affichage du dernier lieu avant d'afficher le bouton
+    } else if (places.length === 0) {
+        // Si aucun lieu n'est retourné par l'API, afficher un message de fin
         setTimeout(() => {
             const endMessage = `
                 <div class="chat-row">
@@ -113,6 +118,8 @@ function displayUserPlacesBatch(places, startIndex) {
     }
 }
 
+
+
 // Fonction pour afficher le message du bot "Voici cinq propositions de plus !"
 function displayBotMoreMessage() {
     const botMessage = `
@@ -126,6 +133,7 @@ function displayBotMoreMessage() {
     chatWrapper.innerHTML += botMessage;
     scrollToBottom(); // Scroll automatique après l'affichage du message
 }
+
 // Fonction pour afficher le bouton "Afficher plus"
 function displayShowMoreButton() {
     const showMoreButton = `
@@ -139,21 +147,57 @@ function displayShowMoreButton() {
     // Ajouter un listener pour le bouton
     document.getElementById("show-more-btn").addEventListener("click", () => {
         document.querySelector(".show-more-container").remove(); // Supprimer le bouton après clic
-        currentPlaceIndex += 5; // Incrémenter l'index pour le prochain lot de lieux
-        displayBotMoreMessage(); // Afficher le message du bot avant d'afficher les nouvelles propositions
-        setTimeout(() => {
-            displayUserPlacesBatch(allPlaces, currentPlaceIndex); // Afficher le prochain lot de lieux après le message du bot
-        }, 1000); // Délai d'une seconde après le message du bot
+        currentPlaceIndex += 5; // Incrémenter l'index pour afficher le prochain lot
+        displayBotMoreMessage(); // Afficher le message du bot après avoir cliqué sur "Afficher plus"
+        setTimeout(fetchMorePlaces, 1000); // Délai d'une seconde après le message du bot avant d'afficher les nouveaux lieux
     });
+}
+
+// Fonction pour appeler l'API et récupérer plus de lieux
+function fetchMorePlaces() {
+    // Envoyer l'index actuel à l'API pour récupérer le prochain lot de lieux
+    const requestData = {
+        address: userAddress,
+        category: selectedCategory,
+        offset: currentPlaceIndex // Utilisation de l'offset pour gérer la pagination côté API
+    };
+
+    fetch('http://127.0.0.1:5000/api_get_places', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.places && data.places.length > 0) {
+            allPlaces = [...allPlaces, ...data.places]; // Ajouter les nouveaux lieux à ceux déjà affichés
+            displayUserPlacesBatch(allPlaces, currentPlaceIndex); // Afficher les nouveaux lieux
+        } else {
+            // Si l'API ne retourne plus de lieux, afficher un message de fin
+            const endMessage = `
+                <div class="chat-row">
+                    <img src="assets/robot_chat.png" alt="Robot" class="robot-image">
+                    <div class="chat-bubble">
+                        Toutes les propositions ont été affichées.
+                    </div>
+                </div>
+            `;
+            chatWrapper.innerHTML += endMessage;
+            scrollToBottom();
+        }
+    })
+    .catch(error => console.error('Erreur:', error));
 }
 
 
 
-// Fonction pour afficher les lieux de manière progressive
-function displayUserPlacesSequentially(places) {
-    allPlaces = places; // Stocker toutes les places
-    currentPlaceIndex = 0; // Réinitialiser l'index
-    displayUserPlacesBatch(allPlaces, currentPlaceIndex); // Afficher les 5 premiers lieux
+// Fonction pour afficher les lieux initiaux de manière progressive
+function displayUserPlacesSequentially() {
+    currentPlaceIndex = 0; // Réinitialiser l'index au début
+    allPlaces = []; // Vider la liste existante
+    fetchMorePlaces(); // Appeler la fonction pour commencer à récupérer les lieux
 }
 
     // Affichage initial du chatbot
@@ -345,6 +389,9 @@ function displayUserPlaces(places) {
         scrollToBottom(); // Scroll automatique après chaque bulle
     });
 }
+
+// Appel de la fonction fetchNearbyPlaces pour démarrer la progression
+fetchNearbyPlaces();
 
     });
     

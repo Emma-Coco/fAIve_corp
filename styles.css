@@ -157,17 +157,16 @@ body, html {
     border-bottom: 10px solid #ffffff;
 }
 
-/* Container pour input et boutons */
+/* Container pour les activités, même style que les bulles de l'utilisateur */
 .user-container {
     background: #ffffff;
     display: flex;
-    padding: 5px 5px;
+    padding: 10px;
     border-radius: 20px;
     align-items: center;
-    box-shadow: 2px 2px 8px rgba(15, 15, 15, 0.2);
+    box-shadow: 2px 2px 8px rgba(15, 15, 15, 0.2); /* Légère ombre */
     align-self: flex-end;
     position: relative;
-    padding: 10px;
     margin-bottom: 12px;
     margin-right: 5px;
     max-width: 80%;
@@ -238,7 +237,7 @@ input {
 .show-more-container {
     display: flex;
     justify-content: flex-end; /* Aligne le bouton à droite */
-    margin: 10px 0; /* Espace vertical autour du bouton */
+    margin: 5px 5px; /* Espace vertical autour du bouton */
     padding: 10px; /* Espace interne pour une apparence plus propre */
 }
 
@@ -258,5 +257,68 @@ input {
     background-color: #333; /* Fond plus foncé au survol */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Ombre plus prononcée au survol */
 }
+/* Style pour les détails du lieu */
+.place-details {
+    font-size: 14px;
+    color: #555; /* Couleur grise pour le texte des détails */
+    line-height: 1.4; /* Hauteur de ligne pour un meilleur espacement */
+}
+
+/* Style pour le nom du lieu */
+.place-name {
+    font-size: 16px;
+    margin-bottom: 5px; /* Espace entre le nom et les détails */
+    color: #E0B1ED; /* Couleur bleue pour le lien */
+    display: inline-block; /* Pour que le titre et la description soient sur la même ligne */
+    margin-right: 5px; /* Espace à droite du titre */
+}
+
+
+/* Style pour le lien de l'activité */
+.activity-link {
+    text-decoration: none; /* Supprimer la sous-ligne */
+}
+
+
+.activity-link:hover .place-name {
+    text-decoration: underline; /* Sous-ligne au survol du nom */
+}
+
+/* Style pour la bulle utilisateur */
+.user-bubble {
+    width: 80%; /* Taille fixe de 80% */
+    display: flex; /* Flexbox pour séparer le titre et la description */
+    justify-content: space-between; /* Espacement entre les deux parties */
+    padding: 10px 15px; /* Espace interne */
+    margin-bottom: 10px; /* Espace entre les bulles */
+    background-color: white; /* Fond de la bulle */
+    border-radius: 20px;
+    box-shadow: 2px 2px 8px rgba(15, 15, 15, 0.2); /* Légère ombre */
+}
+
+/* Titre de l'activité (nom et lien) */
+.place-name {
+    flex: 0 0 40%; /* Occupe 40% de l'espace */
+    font-size: 16px;
+    font-weight: bold;
+    color: #E0B1ED; /* Couleur du lien */
+    margin-right: 10px; /* Espace à droite du titre */
+    word-wrap: break-word;
+}
+
+/* Détails de l'activité (adresse, note, avis) */
+.place-details {
+    flex: 0 0 60%; /* Occupe 60% de l'espace */
+    font-size: 14px;
+    color: #0f0f0f; /* Couleur grise pour les détails */
+    line-height: 1.4; /* Espacement pour faciliter la lecture */
+    word-wrap: break-word;
+}
+
+
+
+
+
+
 
 
